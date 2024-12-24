@@ -1,7 +1,7 @@
 // services/walletService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/wallet';
+const API_URL = 'https://recharge-redeem.onrender.com/api/wallet';
 
 export const getWalletDetails = async (token) => {
     const config = {

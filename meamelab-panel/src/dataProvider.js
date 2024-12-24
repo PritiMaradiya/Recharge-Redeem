@@ -1,7 +1,7 @@
 import jsonServerProvider from 'ra-data-json-server';
 
 const customDataProvider = {
-    ...jsonServerProvider('http://localhost:3000/api'),
+    ...jsonServerProvider('https://recharge-redeem.onrender.com/api'),
 
     // Override the getList method for transactions
     getList: async (resource, params) => {
@@ -20,7 +20,7 @@ const customDataProvider = {
                 });
 
                 // Fetch transactions from API
-                const response = await fetch(`http://localhost:3000/api/wallet/details-transactions?${query}`, {
+                const response = await fetch(`https://recharge-redeem.onrender.com/api/wallet/details-transactions?${query}`, {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth'))?.token}`,
                     },
@@ -46,7 +46,7 @@ const customDataProvider = {
         }
 
         // Fallback to default behavior for other resources
-        return jsonServerProvider('http://localhost:3000/api').getList(resource, params);
+        return jsonServerProvider('https://recharge-redeem.onrender.com/api').getList(resource, params);
     },
 };
 
