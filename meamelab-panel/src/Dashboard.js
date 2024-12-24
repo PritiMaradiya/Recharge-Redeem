@@ -21,6 +21,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 const WalletDashboard = () => {
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState(false); // Added processing state
   const [error, setError] = useState(null);
   const [amount, setAmount] = useState("");
   const [actionError, setActionError] = useState(null);
@@ -62,6 +63,7 @@ const WalletDashboard = () => {
       return;
     }
 
+    setProcessing(true); // Start processing
     try {
       const auth = JSON.parse(localStorage.getItem("auth"));
       const token = auth?.token;
@@ -72,6 +74,8 @@ const WalletDashboard = () => {
     } catch (err) {
       console.error(err);
       setActionError("Failed to recharge wallet");
+    } finally {
+      setProcessing(false); // End processing
     }
   };
 
@@ -82,6 +86,7 @@ const WalletDashboard = () => {
       return;
     }
 
+    setProcessing(true); // Start processing
     try {
       const auth = JSON.parse(localStorage.getItem("auth"));
       const token = auth?.token;
@@ -92,6 +97,8 @@ const WalletDashboard = () => {
     } catch (err) {
       console.error(err);
       setActionError("Failed to redeem wallet");
+    } finally {
+      setProcessing(false); // End processing
     }
   };
 
@@ -140,7 +147,7 @@ const WalletDashboard = () => {
             Add or Redeem Funds
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item lg={6} xs={12}>
               <TextField
                 fullWidth
                 type="number"
@@ -149,17 +156,19 @@ const WalletDashboard = () => {
                 onChange={(e) => setAmount(e.target.value)}
                 error={!!actionError}
                 helperText={actionError}
+                disabled={processing} // Disable input during processing
               />
             </Grid>
             <Grid
               item
-              xs={6}
+              lg={6}
+              xs={12}
               display="flex"
               justifyContent="space-around"
               alignItems="center"
-              sx={{
-                mt: 2, // Margin at the top
-                gap: 2, // Space between buttons
+               sx={{
+                mt: 2,
+                gap: 2,
               }}
             >
               <Button
@@ -173,8 +182,10 @@ const WalletDashboard = () => {
                   "&:hover": {
                     backgroundColor: "#45a049",
                   },
+                  fontSize: "10px",
                 }}
                 onClick={handleRecharge}
+                disabled={processing} // Disable button during processing
               >
                 Recharge
               </Button>
@@ -189,12 +200,19 @@ const WalletDashboard = () => {
                   "&:hover": {
                     backgroundColor: "#e53935",
                   },
+                  fontSize: "10px",
                 }}
                 onClick={handleRedeem}
+                disabled={processing} // Disable button during processing
               >
                 Redeem
               </Button>
             </Grid>
+            {processing && (
+              <Grid item xs={12} sx={{ textAlign: "center", mt: 2 }}>
+                <CircularProgress />
+              </Grid>
+            )}
           </Grid>
         </CardContent>
       </Card>
